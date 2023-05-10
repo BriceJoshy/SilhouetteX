@@ -99,5 +99,12 @@ if __name__=="__main__":
     print(f"Train:\t{len(train_x)} - {len(train_y)}")
     print(f"Train:\t{len(test_x)} - {len(test_y)}")
 
+
+    """ Create directories to save the augmeneted data"""
+    create_directory("new_data/train/image/")
+    create_directory("new_data/train/mask/")
+    create_directory("new_data/test/image/")
+    create_directory("new_data/test/mask/")
+    
     """ Applying the data augmentation for training"""
     # on testing we wont appy
