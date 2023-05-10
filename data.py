@@ -11,6 +11,9 @@ import cv2 as cv
 from glob import glob
 # for progress bar as the progress is not visible for us(how much are done and how much are left)
 from tqdm import tqdm
+# Scikit-learn (Sklearn) is the most useful and robust library for machine learning in Python
+#  More Info : https://www.tutorialspoint.com/scikit_learn/scikit_learn_introduction.htm#:~:text=Scikit%2Dlearn%20(Sklearn)%20is,a%20consistence%20interface%20in%20Python.
+from sklearn.model_selection import train_test_split
 
 
 """ Creating a directory """
@@ -28,29 +31,51 @@ def create_directory(path):
 # 0.1 means out of the complete data we will be using the 1% of the data for the testing and validation purpose
 # here the testing and the validation split is the same 
 def load_data(path,split=0.1):
+    """ Loading images and masks """
     # loading the Images by refering them with the variable X
     # loading the Masks by refering them with the variable Y
     # using the glob variable 
     # repective images and masks while zip() are not their respective ones so we need to sequence them
+    """ Sorting """
+    #  i.e why the "sorted" function is used
     # load all the images ending with the jpg extention For images
     """ For images """
-    X =  glob(os.path.join(path,"images","*.jpg"))
+    X =  sorted(glob(os.path.join(path,"images","*.jpg")))
     #  load all the images ending with the jpg extention For masks
     """ For maks """
-    Y =  glob(os.path.join(path,"masks","*.png"))
-
-    #  basically X and Y are lists
-    #  the length of X and Y should be the same
-    #  basically mapping the images to their corresponding masks
-    #  More Imformations about zip() : https://realpython.com/python-zip-function/
-    for x,y in zip(X,Y):
-        print(x,y)
-
-        #  read and save them here
-        x = cv.imread(x)
-        cv.im
+    Y =  sorted(glob(os.path.join(path,"masks","*.png")))
 
 
+    """Only for Chacking the image and masks are their corresponding pairs"""
+    # #  basically X and Y are lists
+    # #  the length of X and Y should be the same
+    # #  basically mapping the images to their corresponding masks nut its wrong if sorted function is not used
+    # #  More Imformations about zip() : https://realpython.com/python-zip-function/
+    # for x,y in zip(X,Y):
+    #     print(x,y)
+
+    #     #  read and save them here
+    #     x = cv.imread(x)
+    #     cv.imwrite("x.png",x)
+
+    #     #  read and save masks here
+    #     y = cv.imread(y)
+    #     cv.imwrite("y.png",y*255) # making the mask white for checking
+    
+    #     break
+
+    """splitting the data into testing and training"""
+    #  split size will contain the 1% of x
+    split_size = int(len(X) * split)
+
+    # splitting the image and masks
+    # providing X and Y ,basically the list of all images
+    # make sure the random state is same or else it would not be split the same
+    train_x, test_x = train_test_split(X, test_size=split_size,random_state=42)
+    train_y, test_y = train_test_split(Y, test_size=split_size,random_state=42)
+
+    #  returning the training and testing set
+    return (train_x,test_x),(train_y,test_y)
 
 """ Main Function """
 # The __name__ variable merely holds the name of the module or script unless the current module is executing,
@@ -67,4 +92,12 @@ if __name__=="__main__":
     #  path for the data set (below)
     data_path = "people_segmentation"
     # function load data, this function will take the data path and returns the training and testing the masks and images
-    load_data(data_path)
+    (train_x,test_x),(train_y,test_y) = load_data(data_path)
+
+    """ Checking the length of the training and testing"""
+
+    print(f"Train:\t{len(train_x)} - {len(train_y)}")
+    print(f"Train:\t{len(test_x)} - {len(test_y)}")
+
+    """ Applying the data augmentation for training"""
+    # on testing we wont appy
