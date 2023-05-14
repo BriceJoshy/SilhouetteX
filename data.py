@@ -77,6 +77,24 @@ def loading_data(path,split=0.1):
     #  returning the training and testing set
     return (train_x,test_x),(train_y,test_y)
 
+
+def augment_data(images ,masks,save_path,augment=True):
+    # setting the item height and wifth , we'll set it because fixed data needed (size)
+    H = 512
+    W = 512
+    
+    #  loop over the images
+    # tqdm used for the progress bar, one variable "total"how much the loop would run
+    #  for saving the images we need a name
+    #  splitting it using the slash 
+    for x,y in tqdm(zip(images, masks), total=len(images)):
+        # print(x,y)
+        # break
+        name = x.split("\\")[-1].split(".")[0]
+        print(name)
+        break
+
+
 """ Main Function """
 # The __name__ variable merely holds the name of the module or script unless the current module is executing,
 # __main__ is the name of the environment where top-level code is run.
@@ -108,4 +126,10 @@ if __name__=="__main__":
     
     """ Applying the data augmentation for training"""
     # on testing we wont appy
+    #  creating a function for augmenting 
+    #  first it would take the images either for the training or for the mask 
+    # then it would take the path where thr images is needed to be saved
+    # last a booblean variable cld augment, 
+    # if it is true then appy augmnetation if false dont apply
 
+    augment_data(train_x,train_y,"new_data/train/", augment=True)
