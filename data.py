@@ -30,7 +30,7 @@ def create_directory(path):
 # passing the path and argument split as 0.1
 # 0.1 means out of the complete data we will be using the 1% of the data for the testing and validation purpose
 # here the testing and the validation split is the same 
-def load_data(path,split=0.1):
+def loading_data(path,split=0.1):
     """ Loading images and masks """
     # loading the Images by refering them with the variable X
     # loading the Masks by refering them with the variable Y
@@ -40,10 +40,10 @@ def load_data(path,split=0.1):
     #  i.e why the "sorted" function is used
     # load all the images ending with the jpg extention For images
     """ For images """
-    X =  sorted(glob(os.path.join(path,"images","*.jpg")))
+    X_image =  sorted(glob(os.path.join(path,"images","*.jpg")))
     #  load all the images ending with the jpg extention For masks
     """ For maks """
-    Y =  sorted(glob(os.path.join(path,"masks","*.png")))
+    Y_mask =  sorted(glob(os.path.join(path,"masks","*.png")))
 
 
     """Only for Chacking the image and masks are their corresponding pairs"""
@@ -66,13 +66,13 @@ def load_data(path,split=0.1):
 
     """splitting the data into testing and training"""
     #  split size will contain the 1% of x
-    split_size = int(len(X) * split)
+    spliting_size = int(len(X_image) * split)
 
     # splitting the image and masks
     # providing X and Y ,basically the list of all images
     # make sure the random state is same or else it would not be split the same
-    train_x, test_x = train_test_split(X, test_size=split_size,random_state=42)
-    train_y, test_y = train_test_split(Y, test_size=split_size,random_state=42)
+    train_x, test_x = train_test_split(X_image, test_size=spliting_size,random_state=42)
+    train_y, test_y = train_test_split(Y_mask, test_size=spliting_size,random_state=42)
 
     #  returning the training and testing set
     return (train_x,test_x),(train_y,test_y)
@@ -83,7 +83,7 @@ def load_data(path,split=0.1):
 #  “Top-level code” is the first user-specified Python module that starts running.
 if __name__=="__main__":
     """ Seeding the environment """
-    #  the randomness present between the numpy , we will seed it so that i have the same randomness every time
+    # the randomness present between the numpy , we will seed it so that i have the same randomness every time
     # More Info: https://medium.com/geekculture/the-story-behind-random-seed-42-in-machine-learning-b838c4ac290a#:~:text=seed()%20%3F-,random.,generator%20with%20the%20given%20value.
     np.random.seed(42)
     # Reproducibility is a very important concept that ensures that anyone who re-runs the code gets the exact same outputs.
@@ -92,7 +92,7 @@ if __name__=="__main__":
     #  path for the data set (below)
     data_path = "people_segmentation"
     # function load data, this function will take the data path and returns the training and testing the masks and images
-    (train_x,test_x),(train_y,test_y) = load_data(data_path)
+    (train_x,test_x),(train_y,test_y) = loading_data(data_path)
 
     """ Checking the length of the training and testing"""
 
@@ -100,11 +100,12 @@ if __name__=="__main__":
     print(f"Train:\t{len(test_x)} - {len(test_y)}")
 
 
-    """ Create directories to save the augmeneted data"""
-    create_directory("new_data/train/image/")
-    create_directory("new_data/train/mask/")
-    create_directory("new_data/test/image/")
-    create_directory("new_data/test/mask/")
+    """ Creating directories to save the augmeneted data for images and masks seperatly"""
+    create_directory("new_data_generated/train/image/")
+    create_directory("new_data_generated/train/mask/")
+    create_directory("new_data_generated/test/image/")
+    create_directory("new_data_generated/test/mask/")
     
     """ Applying the data augmentation for training"""
     # on testing we wont appy
+
