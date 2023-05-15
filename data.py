@@ -218,7 +218,7 @@ def augment_data(images, masks, save_path, augment=True):
 
             #  if not incremented
             index += 1
-        break
+
 
 """ Main Function """
 # The __name__ variable merely holds the name of the module or script unless the current module is executing,
