@@ -146,7 +146,7 @@ def augment_data(images, masks, save_path, augment=True):
             # More Info: https://paperswithcode.com/method/channel-shuffle#:~:text=Channel%20Shuffle%20is%20an%20operation,channels%20will%20be%20fully%20related.
             aug = ChannelShuffle(p=1.0)
             augmented = aug(image=x, mask=y)
-            #  x1_image and y1_mask are augmented image and mask
+            #  x3_image and y3_mask are augmented image and mask
             x3_image = augmented["image"]
             y3_mask = augmented["mask"]
 
@@ -158,14 +158,14 @@ def augment_data(images, masks, save_path, augment=True):
                 p=1.0, min_holes=3, max_holes=10, max_height=32, max_width=32
             )
             augmented = aug(image=x, mask=y)
-            #  x1_image and y1_mask are augmented image and mask
+            #  x4_image and y4_mask are augmented image and mask
             x4_image = augmented["image"]
             y4_mask = augmented["mask"]
 
             # we are rotating the images to the left or right by 45 degree
             aug = Rotate(limit=45, p=1.0)
             augmented = aug(image=x, mask=y)
-            #  x1_image and y1_mask are augmented image and mask
+            #  x5_image and y5_mask are augmented image and mask
             x5_image = augmented["image"]
             y5_mask = augmented["mask"]
 
@@ -258,4 +258,6 @@ if __name__ == "__main__":
 
     augment_data(train_x, train_y, "new_data_generated/train/", augment=True)
     augment_data(test_x, test_y, "new_data_generated/test/", augment=False)
+
+    """Data processing part is done and we will not use the original images now, Only the augmented data is used further"""
     
