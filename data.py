@@ -131,20 +131,20 @@ def augment_data(images, masks, save_path, augment=True):
             # More Info : https://hasty.ai/docs/mp-wiki/augmentations/horizontal-flip#:~:text=Horizontal%20Flip%20explained,-As%20you%20might&text=To%20define%20the%20term%2C%20Horizontal,horizontally%20along%20the%20y%2Daxis.
             # p is the probability as it is set to 1.0 i surely want to apply horizondal flip
             aug = HorizontalFlip(p=1.0)
-            augmented = aug(image = x,mask = y)
+            augmented = aug(image=x, mask=y)
             #  x1_image and y1_mask are augmented image and mask
             x1_image = augmented["image"]
             y1_mask = augmented["mask"]
-            
+
             # Turning the original image to greyScale
-            x2_image = cv.cvtColor(x,cv.COLOR_RGB2GRAY)
+            x2_image = cv.cvtColor(x, cv.COLOR_RGB2GRAY)
             y2_mask = y
 
             #  Using the channel Shuffle data augtn technique
             #  shuffling the rbg channels (changing the color scheme of the image)
-            #  for this we are going to set the probability to 1.0 as we intent to use this 
+            #  for this we are going to set the probability to 1.0 as we intent to use this
             aug = ChannelShuffle(p=1.0)
-            augmented = aug(image = x,mask = y)
+            augmented = aug(image=x, mask=y)
             #  x1_image and y1_mask are augmented image and mask
             x3_image = augmented["image"]
             y3_mask = augmented["mask"]
@@ -152,22 +152,24 @@ def augment_data(images, masks, save_path, augment=True):
             #  creating the holes in the images 0,0,0 as black ,
             # its replaces the parts if the images as black holes
             #  we want to enforce the model to learn from the incomplete data
-            aug = CoarseDropout(p=1.0,min_holes=3,max_holes=10,max_height=32,max_width=32)
-            augmented = aug(image = x,mask = y)
+            aug = CoarseDropout(
+                p=1.0, min_holes=3, max_holes=10, max_height=32, max_width=32
+            )
+            augmented = aug(image=x, mask=y)
             #  x1_image and y1_mask are augmented image and mask
             x4_image = augmented["image"]
             y4_mask = augmented["mask"]
 
             # we are rotating the images to the left or right by 45 degree
-            aug = Rotate(limit= 45,p=1.0)
-            augmented = aug(image = x,mask = y)
+            aug = Rotate(limit=45, p=1.0)
+            augmented = aug(image=x, mask=y)
             #  x1_image and y1_mask are augmented image and mask
             x5_image = augmented["image"]
             y5_mask = augmented["mask"]
 
             #  append the lists acoordingly
-            X = [x,x1_image,x2_image,x3_image,x4_image,x5_image]
-            Y = [y,y1_mask,y2_mask,y3_mask,y4_mask,y5_mask]
+            X = [x, x1_image, x2_image, x3_image, x4_image, x5_image]
+            Y = [y, y1_mask, y2_mask, y3_mask, y4_mask, y5_mask]
 
         else:
             # If False , then we resize the original image and save them
@@ -178,13 +180,13 @@ def augment_data(images, masks, save_path, augment=True):
         #  there is need of resizing these images
         # the images is compressed unevenly if resized
         #  looping them
-
+        index = 0
         for i_image, m_mask in zip(X, Y):
             # Center crop is cropping an image from center which gives an equal padding on both sides vertically and horizontally
             # More Info: https://hasty.ai/docs/mp-wiki/augmentations/center-crop
             #  resizing the images and mask causes the uneven compressing
             #  as the images and masks are been overwritten we need to have a variable
-            index = 0
+
             try:
                 """Centre Cropping"""
                 # Height - defines the height of the newly cropped image in pixels;
@@ -213,8 +215,8 @@ def augment_data(images, masks, save_path, augment=True):
             cv.imwrite(mask_path, m_mask)
 
             #  if not incremented
-            index +=1
-
+            index += 1
+        break
 
 """ Main Function """
 # The __name__ variable merely holds the name of the module or script unless the current module is executing,
@@ -253,3 +255,5 @@ if __name__ == "__main__":
     # if it is true then appy augmnetation if false dont apply
 
     augment_data(train_x, train_y, "new_data_generated/train/", augment=True)
+    augment_data(test_x, test_y, "new_data_generated/test/", augment=False)
+    
