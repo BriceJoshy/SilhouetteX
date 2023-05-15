@@ -22,8 +22,11 @@ def deeplabv3_plus(shape):
 
     """Encoder"""
     #  importing the encoder
-    #  include top basically means that if any classifier should be added at the end 
-    #  using the encoder for the segmentation task
-    encoder  = ResNet50(weights="imagenet",include_top=False)
+    #  include top basically means that if any classifier should be added at the end  of the network
+    #  using the encoder for the segmentation task so there is not classification work is done i.e why the include top is set to False
+    #  tensor input is the input definined above , i.e the input for the entire network
+    #  the input passes to the resnet encoder
+    encoder  = ResNet50(weights="imagenet",include_top=False,input_tensor=inputs)
 
+    image_features
 
