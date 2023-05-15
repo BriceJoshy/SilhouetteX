@@ -17,10 +17,21 @@ from tqdm import tqdm
 # Scikit-learn (Sklearn) is the most useful and robust library for machine learning in Python
 #  More Info : https://www.tutorialspoint.com/scikit_learn/scikit_learn_introduction.htm#:~:text=Scikit%2Dlearn%20(Sklearn)%20is,a%20consistence%20interface%20in%20Python.
 from sklearn.model_selection import train_test_split
+
 # for augmentation using the augmentation library below
+# Data augmentation is a technique of artificially increasing the training set by creating modified copies of a dataset using existing data
 #  functions stated after the import keyword
 # More Info: https://www.datacamp.com/tutorial/complete-guide-data-augmentation
-from albumentations import HorizontalFlip, GridDistortion, OpticalDistortion, ChannelShuffle, CoarseDropout, CenterCrop, Crop, Rotate
+from albumentations import (
+    HorizontalFlip,
+    GridDistortion,
+    OpticalDistortion,
+    ChannelShuffle,
+    CoarseDropout,
+    CenterCrop,
+    Crop,
+    Rotate,
+)
 
 """ Creating a directory """
 
@@ -114,17 +125,50 @@ def augment_data(images, masks, save_path, augment=True):
         #  after loading the library
         if augment == True:
             #  if True something will definitely happn and incrase the list with more array of images
-            pass
+            # Using the horizondal flip for data augmentation
+            # More Info : https://hasty.ai/docs/mp-wiki/augmentations/horizontal-flip#:~:text=Horizontal%20Flip%20explained,-As%20you%20might&text=To%20define%20the%20term%2C%20Horizontal,horizontally%20along%20the%20y%2Daxis.
+            # p is the probability as it is set to 1.0 i surely want to apply horizondal flip
+            aug = HorizontalFlip(p=1.0)
         else:
             # If False , then we resize the original image and save them
             X = [x]
             Y = [y]
 
+        #  as the images are not of equal size (portrait & landscape)
+        #  there is need of resizing these images
+        # the images is compressed unevenly if resized
         #  looping them
-        for i_image,m_mask in zip(X,Y):
-            
+        for i_image, m_mask in zip(X, Y):
+            # Center crop is cropping an image from center which gives an equal padding on both sides vertically and horizontally
+            # More Info: https://hasty.ai/docs/mp-wiki/augmentations/center-crop
+            #  resizing the images and mask causes the uneven compressing
 
+            try:
+                """Centre Cropping"""
+                # Height - defines the height of the newly cropped image in pixels;
+                # Width - defines the width of the newly cropped image in pixels;
+                # Probability - the probability that the transformation will be applied to an image.
+                aug = CenterCrop(H, W, p=1.0)
+                augmented = aug(image=i_image, mask=m_mask)
+                i_image = augmented["image"]
+                m_mask = augmented["mask"]
 
+            except Exception as e:
+                """Incase the the Centre Cropping doesn't work do the resize operation"""
+                i_image = cv.resize(i_image, (W, H))
+                m_mask = cv.resize(m_mask, (W, H))
+
+            # saving the images names as temporary image and mask name
+            temp_image_name = f"{name}.png"
+            temp_mask_name = f"{name}.png"
+
+            #  setting the path of the images and masks for saving
+            image_path = os.path.join(save_path, "image", temp_image_name)
+            mask_path = os.path.join(save_path, "mask", temp_mask_name)
+
+            #  saving the images and masks generated
+            cv.imwrite(image_path, i_image)
+            cv.imwrite(mask_path, m_mask)
 
         break
 
