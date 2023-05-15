@@ -143,6 +143,7 @@ def augment_data(images, masks, save_path, augment=True):
             #  Using the channel Shuffle data augtn technique
             #  shuffling the rbg channels (changing the color scheme of the image)
             #  for this we are going to set the probability to 1.0 as we intent to use this
+            # More Info: https://paperswithcode.com/method/channel-shuffle#:~:text=Channel%20Shuffle%20is%20an%20operation,channels%20will%20be%20fully%20related.
             aug = ChannelShuffle(p=1.0)
             augmented = aug(image=x, mask=y)
             #  x1_image and y1_mask are augmented image and mask
@@ -152,6 +153,7 @@ def augment_data(images, masks, save_path, augment=True):
             #  creating the holes in the images 0,0,0 as black ,
             # its replaces the parts if the images as black holes
             #  we want to enforce the model to learn from the incomplete data
+            #  More Info: https://www.google.com/imgres?imgurl=https%3A%2F%2Fuser-images.githubusercontent.com%2F43984411%2F82858527-b4ea4300-9f46-11ea-93c9-019243ee1456.png&tbnid=s8RepdjzOoIOEM&vet=10CAoQxiAoAWoXChMIoP_tudr2_gIVAAAAAB0AAAAAEAY..i&imgrefurl=https%3A%2F%2Fgithub.com%2Faleju%2Fimgaug%2Fissues%2F659&docid=Gy112r4E2-kKGM&w=297&h=146&itg=1&q=coarse%20dropout%20augmentaion&ved=0CAoQxiAoAWoXChMIoP_tudr2_gIVAAAAAB0AAAAAEAY
             aug = CoarseDropout(
                 p=1.0, min_holes=3, max_holes=10, max_height=32, max_width=32
             )
