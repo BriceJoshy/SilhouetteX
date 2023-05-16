@@ -153,18 +153,20 @@ def deeplabv3_plus(shape):
 
     #  now we are going to extract the low level features using this upsampled image
     aspp_out_b = encoder.get_layer("conv2_block2_out").output
-
+    """1x1 Convolutions"""
     # Followed by convolutions
     aspp_out_b = Conv2D(filters = 48, kernel_size = 1, padding="same", use_bias=False)(aspp_out_b)
     aspp_out_b = BatchNormalization()(aspp_out_b)
     aspp_out_b = Activation("relu")(aspp_out_b)
     
+    """concatination"""
     # Then by the concatination 
     aspp_out = Concatenate()([aspp_out_a,aspp_out_b])
     # checking the shape
     # it changed to (None, 128, 128, 304)
     # print(aspp_out.shape)
 
+    """3x3 convolutions"""
     #  followed by some more convolutions
     aspp_out = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False)(aspp_out)
     aspp_out = BatchNormalization()(aspp_out)
@@ -173,7 +175,20 @@ def deeplabv3_plus(shape):
     #  checking the shape
     print(aspp_out.shape)
 
+    """3x3 convolutions"""
     # Followed by 3x3 convolutions
+    aspp_out = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False)(aspp_out)
+    aspp_out = BatchNormalization()(aspp_out)
+    aspp_out = Activation("relu")(aspp_out)
+
+    """Upsampling"""
+    #  Followed by upsampling
+    aspp_out = UpSampling2D((4,4), interpolation="bilinear")(aspp_out)
+    # followed by 1x1 convolution layer
+    """1x1 convolutions"""
+    aspp_out = Conv2D(filters = 1,kernel_size = 1)(aspp_out)
+    aspp_out = Activation("sigmoid")(aspp_out)
+
 
 
 
