@@ -40,11 +40,13 @@ def ASPP(inputs):
     # Avreage pooling is done for the input
     shape = inputs.shape
     #  a pool size of about 32 by 32 as we print the shape we got (none,32,32,1024)
+    # checking the shape
     # print(inputs.shape)
     #  now the feature map is converted to 1:1 by 1024
     # setting the input as 'inputs'
     y1_input = AveragePooling2D(pool_size=(shape[1], shape[2]))(inputs)
     #  now the featuer map is (none,1,1,1024)
+    # checking the shape
     # print(y1.shape)
 
     #  now we will upsample and convolution layer
@@ -53,7 +55,7 @@ def ASPP(inputs):
     # use_bais is a boolean used to see if the layer used a bias vector
     # More Info about: https://deepai.org/machine-learning-glossary-and-terms/bias-vector
     #  and y1 as input
-    y1_input = Conv2D(256, 1, padding="same", use_bias=False)(y1_input)
+    y1_input = Conv2D(filters = 256, kernel_size = 1, padding="same", use_bias=False)(y1_input)
 
     """we do the batch_normalization where y1 as input:"""
     # Layer that normalizes its inputs.
@@ -77,32 +79,34 @@ def ASPP(inputs):
 
     # printing the shape of y1
     # the image channels changed to 256 we get (none 32,32,256)
+    # checking the shape
     # print(y1.shape)
 
     # After image Pooling
     """ 1X1 Convolutions """
     #  the same thing with different name 'y2'
     #  the image feature as the input for the first one
-    y2_input = Conv2D(256, 1, padding="same", use_bias=False)(inputs)
+    y2_input = Conv2D(filters = 256, kernel_size = 1, padding="same", use_bias=False)(inputs)
     y2_input = BatchNormalization()(y2_input)
     y2_input = Activation("relu")(y2_input)
 
     # after the 1x1 convolution is done it is followed by the three
     # Where the dialation rate would be applied
+    #  dialation bassically increases the recepty field of the convolution
     # and the dialtion rate is 6,12,18 sequentially
     #  here the color size is changed to 3
     """ 3x3 Convolutions rate = 6 """
-    y3_input = Conv2D(256, 3, padding="same", use_bias=False,dilation_rate=6)(inputs)
+    y3_input = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False,dilation_rate=6)(inputs)
     y3_input = BatchNormalization()(y3_input)
     y3_input = Activation("relu")(y3_input)
 
     """ 3x3 Convolutions rate = 12 """
-    y4_input = Conv2D(256, 3, padding="same", use_bias=False,dilation_rate=12)(inputs)
+    y4_input = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False,dilation_rate=12)(inputs)
     y4_input = BatchNormalization()(y4_input)
     y4_input = Activation("relu")(y4_input)
 
     """ 3x3 Convolutions rate = 18 """
-    y5_input = Conv2D(256, 3, padding="same", use_bias=False,dilation_rate=18)(inputs)
+    y5_input = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False,dilation_rate=18)(inputs)
     y5_input = BatchNormalization()(y5_input)
     y5_input = Activation("relu")(y5_input)
 
@@ -114,7 +118,7 @@ def ASPP(inputs):
 
     #  this is agoin followed by 1x1 convolution
     """ 1x1 Convolution"""
-    y_input = Conv2D(256, 1, padding="same", use_bias=False)(y_input)
+    y_input = Conv2D(filters = 256, kernel_size = 1, padding="same", use_bias=False)(y_input)
     y_input = BatchNormalization()(y_input)
     y_input = Activation("relu")(y_input)
 
@@ -140,7 +144,38 @@ def deeplabv3_plus(shape):
     #  we are setting up the parameters of the image as conv4_block_out
     image_features = encoder.get_layer("conv4_block6_out").output
     #  now this image_features act as the output of the entire resnet50 architecture
-    ASPP(image_features)
+    aspp_out_a = ASPP(image_features)
+    aspp_out_a = UpSampling2D((4,4), interpolation="bilinear")(aspp_out_a)
+    # we need to upsample the aspp_put four times "(None, 32, 32, 32)"
+    # we can see that the shape is changed to (None, 128, 128, 256)
+    # checking the shape
+    # print(aspp_out.shape)
+
+    #  now we are going to extract the low level features using this upsampled image
+    aspp_out_b = encoder.get_layer("conv2_block2_out").output
+
+    # Followed by convolutions
+    aspp_out_b = Conv2D(filters = 48, kernel_size = 1, padding="same", use_bias=False)(aspp_out_b)
+    aspp_out_b = BatchNormalization()(aspp_out_b)
+    aspp_out_b = Activation("relu")(aspp_out_b)
+    
+    # Then by the concatination 
+    aspp_out = Concatenate()([aspp_out_a,aspp_out_b])
+    # checking the shape
+    # it changed to (None, 128, 128, 304)
+    # print(aspp_out.shape)
+
+    #  followed by some more convolutions
+    aspp_out = Conv2D(filters = 256, kernel_size = 3, padding="same", use_bias=False)(aspp_out)
+    aspp_out = BatchNormalization()(aspp_out)
+    aspp_out = Activation("relu")(aspp_out)
+
+    #  checking the shape
+    print(aspp_out.shape)
+
+    # Followed by 3x3 convolutions
+
+
 
 
 if __name__ == "__main__":
