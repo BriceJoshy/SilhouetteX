@@ -226,6 +226,10 @@ def deeplabv3_plus(shape):
     # it changed to (None, 128, 128, 304)
     # print(aspp_out.shape)
 
+    # using the Squeeze and excite feature
+    #  because this is the concatination of two different features i.e one is image feature and the second one is low level feature
+    aspp_out = SqueezeAndExcite(aspp_out)
+
     """3x3 convolutions"""
     #  followed by some more convolutions
     aspp_out = Conv2D(filters=256, kernel_size=3, padding="same", use_bias=False)(
@@ -244,6 +248,9 @@ def deeplabv3_plus(shape):
     )
     aspp_out = BatchNormalization()(aspp_out)
     aspp_out = Activation("relu")(aspp_out)
+
+    # using the Squeeze and excite feature
+    aspp_out = SqueezeAndExcite(aspp_out)
 
     """Upsampling"""
     #  Followed by upsampling
