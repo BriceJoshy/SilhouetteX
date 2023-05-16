@@ -66,6 +66,11 @@ def ASPP(inputs):
     # and y1 as input for activation
     y1 = Activation("relu")(y1)
 
+    # still the shape is 1x1 so we are going to upsample the shape
+    # How much we want to upsample i.e same as pooling  
+    # More Info about bilinear interpolation: https://web.pdx.edu/~jduh/courses/geog493f09/Students/W6_Bilinear%20Interpolation.pdf
+    # More info about upsampling: https://keras.io/api/layers/reshaping_layers/up_sampling2d/
+    y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")
 
 #  taking the shape as input
 def deeplabv3_plus(shape):
