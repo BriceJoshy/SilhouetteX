@@ -1,10 +1,12 @@
-# The network structure combining Deeplabv3 and ResNet 50
+# The network structure combining Deeplabv3 and ResNet 50(Residual network)
 # Building the deeplab_v3 of human segementation
 # More Info : https://learnopencv.com/deeplabv3-ultimate-guide/
 # More Info: https://idiotdeveloper.com/deeplabv3-resnet50-architecture-in-tensorflow-using-keras/
 #  using the resnet50 as the encoder
 
 import os
+# setting the value for the environment variable TF_CPP_MIN_LOG_LEVEL to 2. 
+# This prevents showing information/warning logs from TensorFlow.
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 from tensorflow import keras
