@@ -210,4 +210,6 @@ if __name__ == "__main__":
     # and this entire architecture is the "Deep Lab" with "resnet50" as the pre-trained architecture
     # now we need channel-wise attension mechanism
     # so we use Squeeze and Excitation Network (SENet)
+    # it is a mechanism to imporove the existing CNN networks in creating nore channel interdependencies
+    # i.e improves the efficinecy of the neural network
     # More info: https://idiotdeveloper.com/squeeze-and-excitation-networks/
