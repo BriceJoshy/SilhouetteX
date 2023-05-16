@@ -47,11 +47,12 @@ def ASPP(inputs):
 
 
     #  now we will upsample and convolution layer
-    #  256 as features andsize as 1 padding is same as we dont want to change the shape 
+    #  256 as features and size as 1 padding is same as we dont want to change the shape 
     # More Info about convo2d: https://keras.io/api/layers/convolution_layers/convolution2d/ 
     # use_bais is a boolean used to see if the layer used a bias vector
     # More Info about: https://deepai.org/machine-learning-glossary-and-terms/bias-vector
-    y1 = Conv2D(256,1,padding="same",use_bias=False)
+    #  and y1 as input
+    y1 = Conv2D(256,1,padding="same",use_bias=False)(y1)
 
     """we do the batch_normalization where y1 as input:""" 
     # Layer that normalizes its inputs.
@@ -70,7 +71,12 @@ def ASPP(inputs):
     # How much we want to upsample i.e same as pooling  
     # More Info about bilinear interpolation: https://web.pdx.edu/~jduh/courses/geog493f09/Students/W6_Bilinear%20Interpolation.pdf
     # More info about upsampling: https://keras.io/api/layers/reshaping_layers/up_sampling2d/
-    y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")
+    # Input as y1
+    y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")(y1)
+
+    # printing the shape of y1 we get (none 32,32,256)
+    # the image channels changed to 256
+    print(y1.shape)
 
 #  taking the shape as input
 def deeplabv3_plus(shape):
