@@ -64,11 +64,17 @@ def SqueezeAndExcite(inputs, ratio=8):
     )(sqeeze_excite)
 
     #  again a dense layer but change in the number of filters
-    sqeeze_excite = Dense(filters // ratio,
+    sqeeze_excite = Dense(
+        filters // ratio,
         activation="sigmoid",
         kernel_initializer="he_normal",
-        use_bias=False,)(sqeeze_excite)
+        use_bias=False,
+    )(sqeeze_excite)
 
+    #  then we multiply the original input with the dense one 
+    x_multiply = init * sqeeze_excite
+
+    return x_multiply
 
 """Function for Deeplabv3+"""
 
