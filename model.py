@@ -27,6 +27,7 @@ from keras.layers import (
     Input,
 )
 from keras.applications import ResNet50
+from keras.models import Model
 import tensorflow as tf
 
 """Function for Deeplabv3+"""
@@ -173,7 +174,7 @@ def deeplabv3_plus(shape):
     aspp_out = Activation("relu")(aspp_out)
 
     #  checking the shape
-    print(aspp_out.shape)
+    # print(aspp_out.shape)
 
     """3x3 convolutions"""
     # Followed by 3x3 convolutions
@@ -187,11 +188,17 @@ def deeplabv3_plus(shape):
     # followed by 1x1 convolution layer
     """1x1 convolutions"""
     aspp_out = Conv2D(filters = 1,kernel_size = 1)(aspp_out)
+    #  here we are doing binary segmentation
     aspp_out = Activation("sigmoid")(aspp_out)
+    #  the shape changed to (None, 512, 512, 1)
+    # / this is the output shape of our predicted mask
+    # print(aspp_out.shape)
 
-
-
+    """building the model"""
+    model = Model(inputs,aspp_out)
+    return model
 
 
 if __name__ == "__main__":
-    deeplabv3_plus((512, 512, 3))
+    model = deeplabv3_plus((512, 512, 3))
+    model.summary()
