@@ -40,7 +40,7 @@ def SqueezeAndExcite(inputs, ratio=8):
     #  making a copy of the inputs
     init = inputs
     #  taking the filters from the shape as the filters are the last axis element eg:(none,32,32,1024)
-    # ⬆️
+    ############################################################################################# ⬆️
     filters = init.shape[-1]
     # setting the shape using the filters taken above
     squeeze_excite_shape = (1, 1, filters)
@@ -71,10 +71,11 @@ def SqueezeAndExcite(inputs, ratio=8):
         use_bias=False,
     )(sqeeze_excite)
 
-    #  then we multiply the original input with the dense one 
+    #  then we multiply the original input with the dense one
     x_multiply = init * sqeeze_excite
 
     return x_multiply
+
 
 """Function for Deeplabv3+"""
 
