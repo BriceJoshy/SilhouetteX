@@ -59,6 +59,12 @@ def ASPP(inputs):
     # More info: https://keras.io/api/layers/normalization_layers/batch_normalization/
     y1 = BatchNormalization()(y1)
 
+    # then followed by activation: Applies an activation function to an output
+    # relu function: Applies the rectified linear unit activation function.
+    # More info about relu: https://keras.io/api/layers/activations/
+    # More info about relu function : https://www.kaggle.com/code/dansbecker/rectified-linear-units-relu-in-deep-learning
+    # and y1 as input for activation
+    y1 = Activation("relu")(y1)
 
 
 #  taking the shape as input
