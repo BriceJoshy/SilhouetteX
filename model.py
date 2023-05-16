@@ -19,6 +19,7 @@ import tensorflow as tf
 #  taking the shape as input 
 def deeplabv3_plus(shape):
     # defining the input for the model
+    #  this variable passes to the entire network 
     """ Input For the layers """
     inputs = Input(shape)
 
@@ -28,7 +29,10 @@ def deeplabv3_plus(shape):
     #  using the encoder for the segmentation task so there is not classification work is done i.e why the include top is set to False
     #  tensor input is the input definined above , i.e the input for the entire network
     #  the input passes to the resnet encoder
+    #  first the input passes through the resnet50 encoder then we take the output i.e the image features
     encoder  = ResNet50(weights="imagenet",include_top=False,input_tensor=inputs)
 
-    image_features
+    # More Info about conv4_block6_out: https://stackoverflow.com/questions/60234176/unpack-tf-keras-model-layer
+    #  we are setting up the parameters of the image as conv4_block_out
+    image_features = encoder.get_layer("conv4_block6_out")
 
