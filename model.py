@@ -74,8 +74,8 @@ def ASPP(inputs):
     # Input as y1
     y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")(y1)
 
-    # printing the shape of y1 we get (none 32,32,256)
-    # the image channels changed to 256
+    # printing the shape of y1 
+    # the image channels changed to 256 we get (none 32,32,256)
     print(y1.shape)
 
 #  taking the shape as input
