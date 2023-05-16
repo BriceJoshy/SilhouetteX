@@ -283,3 +283,5 @@ if __name__ == "__main__":
     # i.e improves the efficinecy of the neural network
     # this method is maily used to decrease the computational usage
     # More info: https://idiotdeveloper.com/squeeze-and-excitation-networks/
+
+    """The squeeze and excitation can be used wherever applicable and can be used after every activation function"""
