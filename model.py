@@ -30,9 +30,12 @@ from keras.applications import ResNet50
 from keras.models import Model
 import tensorflow as tf
 
+"""Squeeze and Excitation Network (SENet)"""
+
+
+
+
 """Function for Deeplabv3+"""
-
-
 #  Atrous Spacial Pyramid Pooling for deeplabv3+
 #  More Info: https://developers.arcgis.com/python/guide/how-deeplabv3-works/
 def ASPP(inputs):
@@ -202,3 +205,9 @@ def deeplabv3_plus(shape):
 if __name__ == "__main__":
     model = deeplabv3_plus((512, 512, 3))
     model.summary()
+    # in the terminal it shows the correct architecture in all the stages like he concatinated features 
+    # and all the entire summary is shown the terminal
+    # and this entire architecture is the "Deep Lab" with "resnet50" as the pre-trained architecture
+    # now we need channel-wise attension mechanism
+    # so we use Squeeze and Excitation Network (SENet)
+    # More info: https://idiotdeveloper.com/squeeze-and-excitation-networks/
