@@ -65,7 +65,7 @@ def SqueezeAndExcite(inputs, ratio=8):
 
     #  again a dense layer but change in the number of filters
     sqeeze_excite = Dense(
-        filters // ratio,
+        filters,
         activation="sigmoid",
         kernel_initializer="he_normal",
         use_bias=False,
