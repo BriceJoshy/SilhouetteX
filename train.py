@@ -88,7 +88,7 @@ def tf_parse(x_image, y_mask):
     # First we mention the function to be used in tensorflow nd then the input then the specific datatypes
     #  and this tf.numpy_function return a variable/variables here x_image and y_mask
     x_image, y_mask = tf.numpy_function(
-        _parse, [x_image, y_mask], tf.float32, tf.float32
+        _parse, [x_image, y_mask], [tf.float32, tf.float32]
     )
 
     # then we can set the shape of the x_image and y_mask
@@ -171,5 +171,5 @@ if __name__ == "__main__":
     validation_dataset = tf_dataset(valid_x, valid_y, batch=batch_size)
 
     for x_image,y_mask in training_dataset:
-        print(x_image.shape(),y_mask.shape())
+        print(x_image.shape,y_mask.shape)
         break
