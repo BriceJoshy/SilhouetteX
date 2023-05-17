@@ -39,9 +39,24 @@ def shuffling(x,y):
 #  now the main function
 
 if __name__ == "__main__":
-    """Seeding"""
+    """ Seeding """
     np.random.seed(42)
     tf.random.set_seed(42)
 
-    """Creating a directory to store the files"""
+    """ Creating a directory to store the files """
     create_directory("storage_files")
+
+    """ Hyper parameters """
+    # The batch size is a number of samples processed before the model is updated. 
+    # The number of epochs is the number of complete passes through the training dataset.
+    batch_size = 2
+    # is a hyper-parameter used to govern the pace at which an algorithm updates or learns the values of a parameter estimate
+    learning_rate = 1e-4
+    # num_epochs indicates how many times will the input_fn return the whole batch
+    # and steps indicates how many times the function should run.
+    num_epoch = 20
+    #  it is the path where you're saving you model
+    model_save_path = os.path.join("storage_files","silhouetteX.h5")
+    # A CSV file (Comma Separated Values file) is a type of plain text file that uses specific structuring to arrange tabular data
+    #  More Info: https://realpython.com/python-csv/#:~:text=A%20CSV%20file%20(Comma%20Separated,given%20away%20by%20its%20name.
+    csv__save_path = os.path.join("storage_files","data.csv")
