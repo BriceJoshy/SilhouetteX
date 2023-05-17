@@ -37,6 +37,32 @@ def shuffling(x,y):
     x,y = shuffle(x,y,random_state=42)
     return x,y
 
+""" Reading the Image"""
+def reading_image(path):
+    #  decode the path of the image as string
+    path = path.decode()
+    #  now reading the image as rgb
+    x_image = cv.imread(path,cv.IMREAD_COLOR)
+    #  normalizing the image by dividing the image by 255
+    x_image = x_image/255.0
+    # converting the image to float32
+    x_image = x_image.astype(np.float32)
+    return x_image
+
+""" Reading the Masks"""
+def reading_mask(path):
+    #  decode the path of the image as string
+    path = path.decode()
+    #  now reading the image as rgb
+    y_mask = cv.imread(path,cv.IMREAD_GRAYSCALE)
+    # no need to normalize the image as the image is already in the range f 0  and 1 cuz of the greyscale
+    # converting the image to float32
+    y_mask = y_mask.astype(np.float32)
+    # More info: https://www.educative.io/answers/what-is-the-numpyexpanddims-function-in-numpy
+    # Expanding the last axis
+    y_mask = np.expand_dims(y_mask, axis=-1)
+    return y_mask
+
 """ Load Data """
 def load_data(path):
     #  x refers to the image and y refers to the masks 
