@@ -81,27 +81,28 @@ def tf_parse(x_image, y_mask):
     def _parse(x_image, y_mask):
         x_image = reading_image(x_image)
         y_mask = reading_mask(y_mask)
-        return x_image,y_mask
-    
+        return x_image, y_mask
+
     # to include the numpy function in the tensor flow as these functions are outside ofthe tensorflow environment we use the tf.nump
     # to include the functions whuch are not included in the tensrflow we use the tf.numpy
     # First we mention the function to be used in tensorflow nd then the input then the specific datatypes
-    #  and this tf.numpy_function return a variable/variables here x_image and y_mask 
-    x_image,y_mask = tf.numpy_function(_parse,[x_image,y_mask],tf.float32,tf.float32)
-    
+    #  and this tf.numpy_function return a variable/variables here x_image and y_mask
+    x_image, y_mask = tf.numpy_function(
+        _parse, [x_image, y_mask], tf.float32, tf.float32
+    )
+
     # then we can set the shape of the x_image and y_mask
     #  we read the image as RGB image i.e the no: of channels is 3
-    x_image.set_shape([H,W,3])
+    x_image.set_shape([H, W, 3])
     #  the number of channels is 1 as the mask is read as greyscale
-    y_mask.set_shape([H,W,1])
+    y_mask.set_shape([H, W, 1])
 
-    return x_image,y_mask
+    return x_image, y_mask
 
-    
     # this will take an image and a mask and an optional batch
-def tf_dataset(X_image,Y_mask,batch=2):
+def tf_dataset(X_image, Y_mask, batch=2):
     #  the dataset will be a list
-    dataset = tf.data.Dataset.from_tensor_slices((X_image,Y_mask))
+    dataset = tf.data.Dataset.from_tensor_slices((X_image, Y_mask))
     dataset = dataset.map(tf_parse)
     # it takes the individual path og the image and mask and give it to function x and why
 
@@ -165,3 +166,10 @@ if __name__ == "__main__":
 
     print(f"Training:\t{len(train_x)} - {len(train_y)}")
     print(f"validation:\t{len(valid_x)} - {len(valid_y)}")
+
+    training_dataset = tf_dataset(train_x, train_y, batch=batch_size)
+    validation_dataset = tf_dataset(valid_x, valid_y, batch=batch_size)
+
+    for x_image,y_mask in training_dataset:
+        print(x_image.shape(),y_mask.shape())
+        break
