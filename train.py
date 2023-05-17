@@ -82,9 +82,22 @@ def tf_parse(x_image, y_mask):
         x_image = reading_image(x_image)
         y_mask = reading_mask(y_mask)
         return x_image,y_mask
-    # to include the numpy function in the tensor flow as these functions are outside of the tensorflow environment we use the tf.nump
-    # to include the functions whuch are not included in the tensrflow we use the tf.numpy
     
+    # to include the numpy function in the tensor flow as these functions are outside ofthe tensorflow environment we use the tf.nump
+    # to include the functions whuch are not included in the tensrflow we use the tf.numpy
+    # First we mention the function to be used in tensorflow nd then the input then the specific datatypes
+    #  and this tf.numpy_function return a variable/variables here x_image and y_mask 
+    x_image,y_mask = tf.numpy_function(_parse,[x_image,y_mask],tf.float32,tf.float32)
+    
+    # then we can set the shape of the x_image and y_mask
+    #  we read the image as RGB image i.e the no: of channels is 3
+    x_image = x_image.set_shape([H,W,3])
+    #  the number of channels is 1 as the mask is read as greyscale
+    y_mask = y_mask.set_shape([H,W,1])
+
+    return x_image,y_mask
+    
+
 
 """ Load Data """
 
