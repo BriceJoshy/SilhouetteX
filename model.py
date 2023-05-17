@@ -7,7 +7,7 @@
 import os
 
 # setting the value for the environment variable TF_CPP_MIN_LOG_LEVEL to 2.
-# This prevents showing information/warning logs from TensorFlow.
+# This prevents showing unwanted information/warning logs from TensorFlow.
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 from tensorflow import keras
