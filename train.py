@@ -100,6 +100,8 @@ def tf_parse(x_image, y_mask):
     return x_image, y_mask
 
     # this will take an image and a mask and an optional batch
+
+
 def tf_dataset(X_image, Y_mask, batch=2):
     #  the dataset will be a list
     dataset = tf.data.Dataset.from_tensor_slices((X_image, Y_mask))
@@ -170,6 +172,6 @@ if __name__ == "__main__":
     training_dataset = tf_dataset(train_x, train_y, batch=batch_size)
     validation_dataset = tf_dataset(valid_x, valid_y, batch=batch_size)
 
-    for x_image,y_mask in training_dataset:
-        print(x_image.shape,y_mask.shape)
+    for x_image, y_mask in training_dataset:
+        print(x_image.shape, y_mask.shape)
         break
