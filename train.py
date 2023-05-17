@@ -91,12 +91,27 @@ def tf_parse(x_image, y_mask):
     
     # then we can set the shape of the x_image and y_mask
     #  we read the image as RGB image i.e the no: of channels is 3
-    x_image = x_image.set_shape([H,W,3])
+    x_image.set_shape([H,W,3])
     #  the number of channels is 1 as the mask is read as greyscale
-    y_mask = y_mask.set_shape([H,W,1])
+    y_mask.set_shape([H,W,1])
 
     return x_image,y_mask
+
     
+    # this will take an image and a mask and an optional batch
+def tf_dataset(X_image,Y_mask,batch=2):
+    #  the dataset will be a list
+    dataset = tf.data.Dataset.from_tensor_slices((X_image,Y_mask))
+    dataset = dataset.map(tf_parse)
+    # it takes the individual path og the image and mask and give it to function x and why
+
+    # after reading the individial files we'll create a batch of it
+    dataset = dataset.batch(batch)
+    # prefex some of them in the dataset
+    # this is done to prevent the fetching of it after first batch has entered and i don'nt want the model to wait for the fetching and waste time
+    # 10 batches  and each batches contain 2 images
+    dataset = dataset.prefetch(10)
+    return dataset
 
 
 """ Load Data """
