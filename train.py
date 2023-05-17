@@ -18,6 +18,7 @@ from keras.optimizers import Adam
 from keras.metrics import Recall,Precision
 from model import deeplabv3_plus
 from metrics import dice_coeff,dice_loss,iou
+import data
 
 #  defining the global hyper parameters
 """ Global parameters """
@@ -36,8 +37,17 @@ def shuffling(x,y):
     x,y = shuffle(x,y,random_state=42)
     return x,y
 
-#  now the main function
+""" Load Data """
+def load_data(path):
+    #  x refers to the image and y refers to the masks 
+    #  x refers to the features and the y refers to the labels\
+    X_image = sorted(glob(os.path.join(path, "image", "*.png")))
+    Y_mask = sorted(glob(os.path.join(path, "mask", "*.png")))
+    return X_image,Y_mask
+ 
 
+#  now the main function
+""" Main Function """
 if __name__ == "__main__":
     """ Seeding """
     np.random.seed(42)
@@ -63,3 +73,16 @@ if __name__ == "__main__":
 
     """ DataSet """
     # we will be using the aumented data we processed
+    # specifying the dataset path first
+    dataset_path = "new_data_generated"
+    training_path = os.path.join(dataset_path,"train")
+    validation_path = os.path.join(dataset_path,"test")
+    
+    #  we are going to load the data using the load dataset
+    train_x, train_y = load_data(training_path)
+    # we are goin to shuffle the different data in between
+    train_x,valid_y = shuffling(train_x,train_y)
+    valid_x, valid_y = load_data(validation_path)
+
+    print(f"Training:\t{len(train_x)} - {len(train_y)}")
+    print(f"validation:\t{len(valid_x)} - {len(valid_y)}")

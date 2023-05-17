@@ -240,7 +240,7 @@ if __name__ == "__main__":
     """ Checking the length of the training and testing"""
 
     print(f"Train:\t{len(train_x)} - {len(train_y)}")
-    print(f"Train:\t{len(test_x)} - {len(test_y)}")
+    print(f"Test:\t{len(test_x)} - {len(test_y)}")
 
     """ Creating directories to save the augmeneted data for images and masks seperatly"""
     create_directory("new_data_generated/train/image/")
