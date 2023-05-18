@@ -99,9 +99,8 @@ def tf_parse(x_image, y_mask):
 
     return x_image, y_mask
 
-    # this will take an image and a mask and an optional batch
 
-
+# this will take an image and a mask and an optional batch
 def tf_dataset(X_image, Y_mask, batch=2):
     #  the dataset will be a list
     dataset = tf.data.Dataset.from_tensor_slices((X_image, Y_mask))
