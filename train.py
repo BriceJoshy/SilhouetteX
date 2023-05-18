@@ -214,5 +214,7 @@ if __name__ == "__main__":
     # fits the training data into the model
     model.fit(
         training_dataset,
-        validation_data= validation_dataset
+        epochs = num_epoch,
+        validation_data= validation_dataset,
+        callbacks=callbacks   
     )
