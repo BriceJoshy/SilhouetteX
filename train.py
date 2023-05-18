@@ -140,7 +140,7 @@ if __name__ == "__main__":
     """ Hyper parameters """
     # The batch size is a number of samples processed before the model is updated.
     # The number of epochs is the number of complete passes through the training dataset.
-    batch_size = 8
+    batch_size = 2
     # is a hyper-parameter used to govern the pace at which an algorithm updates or learns the values of a parameter estimate
     learning_rate = 1e-4
     # num_epochs indicates how many times will the input_fn return the whole batch
