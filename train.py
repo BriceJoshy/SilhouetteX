@@ -205,5 +205,5 @@ if __name__ == "__main__":
         ),
         CSVLogger(csv__save_path),
         TensorBoard(),
-        EarlyStopping(moniter = "val_loss",patience=20,restore_best_weights=True)
+        EarlyStopping(moniter = "val_loss",patience=20,restore_best_weights=False)
     ]
