@@ -15,7 +15,7 @@ from glob import glob
 from sklearn.utils import shuffle
 import tensorflow as tf
 from tensorflow import keras
-from keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPlateau, EarlyStopping
+from keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPlateau, EarlyStopping, TensorBoard
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision
 from model import deeplabv3_plus
@@ -171,6 +171,39 @@ if __name__ == "__main__":
     training_dataset = tf_dataset(train_x, train_y, batch=batch_size)
     validation_dataset = tf_dataset(valid_x, valid_y, batch=batch_size)
 
-    for x_image, y_mask in training_dataset:
-        print(x_image.shape, y_mask.shape)
-        break
+    ## for checking the shape
+    # for x_image, y_mask in training_dataset:
+    #     print(x_image.shape, y_mask.shape)
+    #     break
+
+    """Working on the Model"""
+    # Python compile() function takes source code as input and
+    # returns a code object which is ready to be executed and which can later be executed by the exec() function
+    model = deeplabv3_plus((H, W, 3))
+    model.compile(
+        loss=dice_loss,
+        optimizer=Adam(learning_rate),
+        metrics=[dice_coeff, iou, Recall(), Precision()],
+    )
+    # #  to get the summary of the model
+    # model.summary()
+
+    #  we need some callback to save the data
+    callbacks = [
+        # this is the place where the model is saved
+        # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/ModelCheckpoint
+        ModelCheckpoint(model_save_path, verbose=0, save_best_only=True),
+       
+        # this is used to reduce the learning rate of the model
+        # if the validation loss is not increased it decreases the learning rate with a factor
+        ReduceLROnPlateau(
+            monitor="val_loss",
+            factor=0.1,
+            patience=5,
+            min_lr=1e-7,
+            verbose=1
+        ),
+        CSVLogger(csv__save_path),
+        TensorBoard(),
+        EarlyStopping(moniter = "val_loss",patience=20,restore_best_weights=True)
+    ]
