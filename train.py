@@ -140,7 +140,7 @@ if __name__ == "__main__":
     """ Hyper parameters """
     # The batch size is a number of samples processed before the model is updated.
     # The number of epochs is the number of complete passes through the training dataset.
-    batch_size = 2
+    batch_size = 8
     # is a hyper-parameter used to govern the pace at which an algorithm updates or learns the values of a parameter estimate
     learning_rate = 1e-4
     # num_epochs indicates how many times will the input_fn return the whole batch
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         TensorBoard(),
         # if the model shows decreasing val_loss for 20 continues epoch then stop the model as it is not good to train the model then 
         # wastage of resourse is not good
-        EarlyStopping(moniter = "val_loss",patience=20,restore_best_weights=False)
+        EarlyStopping(monitor = "val_loss",patience=20,restore_best_weights=False)
     ]
 
     # fits the training data into the model
