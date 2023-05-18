@@ -203,7 +203,16 @@ if __name__ == "__main__":
             min_lr=1e-7,
             verbose=1
         ),
+        #  it is used to store all the matrices and the loss function for the training and vaidation process
         CSVLogger(csv__save_path),
         TensorBoard(),
+        # if the model shows decreasing val_loss for 20 continues epoch then stop the model as it is not good to train the model then 
+        # wastage of resourse is not good
         EarlyStopping(moniter = "val_loss",patience=20,restore_best_weights=False)
     ]
+
+    # fits the training data into the model
+    model.fit(
+        training_dataset,
+        validation_data= validation_dataset
+    )
